@@ -55,6 +55,9 @@ $foiehfoieh = $_SESSION['user']['username'];
         } else {
         	$rank = "USER";        
         }
+        
+        $useriddis = $_SESSION['user']['userid'];
+        
 ?>
 
 <!DOCTYPE html>
@@ -166,7 +169,9 @@ input[type=submit]:hover {
 
 
 
+
         </style>
+        
         
         <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="chisdealhdyt" data-description="Support me on Buy me a coffee!" data-message="Thank you visit my websites, please if dont mind if enjoy site. please send me a TIP $1 for how much i put into coding / setup sites. it shows good support of my projects i do." data-color="#79D6B5" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
         
@@ -315,13 +320,56 @@ input[type=submit]:hover {
               <!-- Illustrations -->
               <div class="border-left-warning">
                 <div class="card-header py-3">
-                  	<h6 class="m-0 font-weight-bold text-primary">Channels Lists</h6>
+                  	<h6 class="m-0 font-weight-bold text-primary">Channels Lists || <input type="button" name="" value="+" onclick='document.getElementById(`id02`).style.display=`block`;'/></h6>
                 </div>
                 <div class="card-body">
                    <div class="row">
                       <div class="col-sm-12">
                          <ul class="list-group list-group-flush">
+                         
+                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
 
+                                <table>
+<thead>
+<tr><th><strong>S.No</strong></th><th><strong>Platform</strong></th><th><strong>Streamkey</strong></th><th><strong>enabled</strong></th><th><strong>Delete</strong></th></tr>
+</thead>
+<tbody>
+<?php
+$count=1;
+$sel_query="Select * from stream_profiles WHERE userid='$useriddis';";
+$resultdata = mysqli_query($dbconnect,$sel_query);
+while($rowdata = mysqli_fetch_assoc($resultdata)) { ?>
+<tr><td align="center"><?php echo $count; ?></td><td align="center"><?php echo $rowdata["provider"]; ?></td><td align="center"><?php echo $rowdata["streamkey"]; ?></td>
+
+<?php if ($rowdata["enabled"] == 1) { ?>
+
+<td align="center"><a href="toggleoff.php?id=<?php echo $rowdata["id"]; ?>">Disable</a></td>
+
+<?php } else { ?>
+
+<td align="center"><a href="toggleon.php?id=<?php echo $rowdata["id"]; ?>">Enable</a></td>
+
+<?php } ?>
+
+<td align="center"><a href="delete.php?id=<?php echo $rowdata["id"]; ?>">Delete</a></td></tr>
+<?php $count++; } ?>
+</tbody>
+</table>
+
+<script>
+
+const togglePassword = document.querySelector('#togglePassword');
+const password = document.querySelector('#password');
+
+togglePassword.addEventListener('click', function (e) {
+    // toggle the type attribute
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    password.setAttribute('type', type);
+    // toggle the eye / eye slash icon
+    this.classList.toggle('bi-eye');
+});
+
+</script>
                          </ul>
                       </div>
                    </div>
@@ -332,7 +380,106 @@ input[type=submit]:hover {
                </div>
                                  
                       
-		        
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<style>
+.modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.1);
+    transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+}
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 1rem 1.5rem;
+    width: 24rem;
+    border-radius: 0.5rem;
+}
+.close-button {
+    float: right;
+    width: 1.5rem;
+    line-height: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    background-color: lightgray;
+}
+.close-button:hover {
+    background-color: darkgray;
+}
+.show-modal {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1.0);
+    transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}
+
+.layer {
+    background-color: rgba(123, 4, 93, 0.30);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+      
+  </style>
+  
+<div id="id02" class="w3-modal">
+    <div class="w3-modal-content w3-animate-zoom w3-card-4">
+      <header class="w3-container w3-teal"> 
+        <span onclick="document.getElementById('nekopack1').style.display='none'" 
+        class="w3-button w3-display-topright">&times;</span>
+        <center><h2>ADD CHANNEL</h2></center>
+      </header>
+      <div class="w3-container">
+
+<center>	  
+
+<form method="post" action="channels.php">
+					
+			<h3>Platform</h3>
+			<select id="platform" name="platform" required>
+          
+          <option value="twitch">Twitch</option>
+          <option value="vimmtv">VimmTV</option>
+          <option value="dlive">Dlive</option>
+          <option value="thetatv">ThetaTV</option>
+            
+      </select>
+		  <h3>StreamKey</h3>
+			<input id="key" name="key" placeholder="Enter your Stream Key" type="text" maxlength="500" required>
+    
+      <div class="container-login100-form-btn m-t-32">
+			  <button class="buttontwitch" name="setstreamkey_btn">Apply</button>
+      </div>
+<br>
+<div class="container-login100-form-btn m-t-32">
+		<button onclick="document.getElementById(`id02`).style.display=`none`">Cancel</button>
+</div>
+<br>
+				</form>
+</center>
+      </div>
+      <footer class="w3-container w3-teal">
+        <center><p>NOTE: Tis is on BETA, Will expect Bugs so Please Report, You can Support @ <br><a href="https://apps.chisdealhd.co.uk/profile/?user=chisdealhdyt">DONATE COMMUNITY BY CLICK HERE!</a></p></center>
+      </footer>
+    </div>
+  </div>	  
+  
+  
+  
+  
                     
                     
                     <div id="settings" class="tabcontent">
@@ -350,9 +497,70 @@ input[type=submit]:hover {
                    <div class="row">
                       <div class="col-sm-12">
                          <ul class="list-group list-group-flush">
+
+<h1>STATUS TRACKER</h1>
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+
+<script>
+
+
+    
+    		    let timer = 30;
+            let updating = false;
+            let lastRefresh = "";
+
+            function updateTimer() {
+                if (updating) return;
+                timer -= 1;
+                if (timer !== 0) {
+                    document.getElementById("timer").innerHTML = "Checking in " + timer.toFixed(0) + "s";
+                } else {
+                
+                    document.getElementById("timer").innerHTML = "Checking...";
+                    timer = 30;
+                    updating = true;
+                     $.ajax({
+	                      type: "get",
+	                      url: "checkrefresh.php?user=<?php echo $useriddis; ?>",
+                          success: function(html){
+                            
+                            var dataResult = JSON.parse(html);
                             
                             
+                            if (dataResult.statusCode==200) { 
                             
+                                updating = true;
+                              
+                                document.getElementById("timer").innerHTML = "YOU ARE ONLINE!";
+                                
+                                document.getElementById("paid").innerHTML = "";
+                                
+                            
+                            } else {
+                            
+                              document.getElementById("paid").innerHTML = "YOU NOT LIVE!";
+                              updating = false;
+                              
+                            }
+	                        }
+                    });
+                }
+            }
+
+            setInterval(updateTimer, 1000);
+    
+    
+    
+updateTimer();
+</script>
+<div id="timer">Checking in 30</div>
+<div id="paid"></div></p></center>
+<br>
+<h2>SERVER INFO</h2>                
+                                            
                             <?php 
                             
                             session_start();

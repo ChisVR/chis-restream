@@ -1,7 +1,7 @@
 <?php
 
-require('./dbinfo.php');
-					$user = isset($_GET['user']) ? $_GET['user'] : '';
+require('../includes/dbinfo.php');
+					$user = $argv[1];
 
 		              $query11 = mysqli_query($dbconnect, "SELECT streamkey FROM stream_profiles WHERE userid='$user'")
 		              or die (mysqli_error($dbconnect));
